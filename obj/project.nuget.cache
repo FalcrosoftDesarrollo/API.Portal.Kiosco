@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "dgSpecHash": "50MAelfxC3sQeWV+1NGNiX+CF/2Z6m2qtdE06PQzcZvxLCNF/+lUDn5xO5CpShAsizTYFMsXnEnb8DkTfV5z/w==",
+  "success": false,
+  "projectFilePath": "C:\\FALCROSOFT\\PROCINAL\\API.Portal.Kiosco\\APIPortalKiosco.csproj",
+  "expectedPackageFiles": [],
+  "logs": [
+    {
+      "code": "NU1104",
+      "level": "Error",
+      "message": "Unable to find project 'C:\\FALCROSOFT\\PROCINAL\\APIPortalKiosco.Entities\\APIPortalKiosco.Entities.csproj'. Check that the project reference is valid and that the project file exists.",
+      "libraryId": "C:\\FALCROSOFT\\PROCINAL\\APIPortalKiosco.Entities\\APIPortalKiosco.Entities.csproj",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    }
+  ]
+}

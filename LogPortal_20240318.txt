@@ -1,0 +1,24 @@
+79d66d9e-e6cd-42c5-a20a-6aad67c9e4a0 | 18/03/2024 12:15:29 p. m. | Home/DeleteCart | GET | Session has not been configured for this application or request. | null
+79d66d9e-e6cd-42c5-a20a-6aad67c9e4a0 | 18/03/2024 12:15:29 p. m. | Home/DeleteCart | GET Exeption unsave BD | Value cannot be null. (Parameter 'connectionString') | null
+c3baeb2b-d2bc-4964-8a71-cf58ff8cf555 | 18/03/2024 1:39:42 p. m. | CineFans/CineFans | GET | Session has not been configured for this application or request. | null
+c3baeb2b-d2bc-4964-8a71-cf58ff8cf555 | 18/03/2024 1:39:42 p. m. | CineFans/CineFans | GET Exeption unsave BD | Value cannot be null. (Parameter 'connectionString') | null
+2186e2f6-7197-4e36-bf1b-148a1e31b93c | 18/03/2024 1:52:40 p. m. | CineFans/CineFans | GET | Session has not been configured for this application or request. | null
+2186e2f6-7197-4e36-bf1b-148a1e31b93c | 18/03/2024 1:52:40 p. m. | CineFans/CineFans | GET Exeption unsave BD | Value cannot be null. (Parameter 'connectionString') | null
+d1c709a0-fde2-499a-a90b-625dafd3f5ab | 18/03/2024 6:23:03 p. m. | Pages/RememberPwd | GET | Session has not been configured for this application or request. | null
+d1c709a0-fde2-499a-a90b-625dafd3f5ab | 18/03/2024 6:23:03 p. m. | Pages/RememberPwd | GET Exeption unsave BD | Value cannot be null. (Parameter 'connectionString') | null
+8f09f50b-5c6d-489c-bb77-b227f40b896b | 18/03/2024 7:59:13 p. m. | Pages/RememberPwd | GET | Session has not been configured for this application or request. | null
+8f09f50b-5c6d-489c-bb77-b227f40b896b | 18/03/2024 7:59:13 p. m. | Pages/RememberPwd | GET Exeption unsave BD | Value cannot be null. (Parameter 'connectionString') | null
+05b2cbd5-b08b-46ce-8322-1a966062b579 | 18/03/2024 8:09:41 p. m. | CineFans/CineFans | GET | Session has not been configured for this application or request. | null
+05b2cbd5-b08b-46ce-8322-1a966062b579 | 18/03/2024 8:09:41 p. m. | CineFans/CineFans | GET Exeption unsave BD | Value cannot be null. (Parameter 'connectionString') | null
+a728d3dd-3736-4dca-bb8a-6b656cee2b33 | 18/03/2024 8:13:47 p. m. | Pages/Login | POST | Session has not been configured for this application or request. | null
+a728d3dd-3736-4dca-bb8a-6b656cee2b33 | 18/03/2024 8:13:47 p. m. | Pages/Login | POST Exeption unsave BD | Value cannot be null. (Parameter 'connectionString') | null
+62070cf3-5d43-451e-a135-54089d29d27c | 18/03/2024 8:14:22 p. m. | Pages/Login | POST | Session has not been configured for this application or request. | null
+62070cf3-5d43-451e-a135-54089d29d27c | 18/03/2024 8:14:22 p. m. | Pages/Login | POST Exeption unsave BD | Value cannot be null. (Parameter 'connectionString') | null
+7084ab29-f875-41e4-b808-55d30986679d | 18/03/2024 8:18:49 p. m. | Pages/Login | POST | Value cannot be null. (Parameter 'url') | null
+7084ab29-f875-41e4-b808-55d30986679d | 18/03/2024 8:18:49 p. m. | Pages/Login | POST Exeption unsave BD | Value cannot be null. (Parameter 'connectionString') | null
+22167ee2-7ea5-400e-bd25-b07f3e1f7cfd | 18/03/2024 8:19:11 p. m. | Pages/RememberPwd | GET | Value cannot be null. (Parameter 'url') | null
+22167ee2-7ea5-400e-bd25-b07f3e1f7cfd | 18/03/2024 8:19:11 p. m. | Pages/RememberPwd | GET Exeption unsave BD | Value cannot be null. (Parameter 'connectionString') | null
+a2941a4b-f130-4aaf-92a6-ca200aec76f3 | 18/03/2024 8:20:03 p. m. | Home/LastSaleIdx | GET | Value cannot be null. (Parameter 'url') | null
+a2941a4b-f130-4aaf-92a6-ca200aec76f3 | 18/03/2024 8:20:03 p. m. | Home/LastSaleIdx | GET Exeption unsave BD | Value cannot be null. (Parameter 'connectionString') | null
+8b8cc687-ad1e-4e82-83ed-9321a3bc7bd8 | 18/03/2024 8:29:12 p. m. | Pages/Login | POST | Value cannot be null. (Parameter 'url') | null
+8b8cc687-ad1e-4e82-83ed-9321a3bc7bd8 | 18/03/2024 8:29:12 p. m. | Pages/Login | POST Exeption unsave BD | Value cannot be null. (Parameter 'connectionString') | null

@@ -1,0 +1,2 @@
+083ed224-6ac0-442a-a746-a454db19846a | 23/03/2024 12:16:03 p. m. | CineFans/CineFans | GET | Value cannot be null. (Parameter 'url') | null
+083ed224-6ac0-442a-a746-a454db19846a | 23/03/2024 12:16:03 p. m. | CineFans/CineFans | GET Exeption unsave BD | Value cannot be null. (Parameter 'connectionString') | null
