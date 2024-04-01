@@ -11,7 +11,6 @@
 ******************************************************************************************/
 using APIPortalKiosco.Data;
 using APIPortalKiosco.Entities;
-using APIPortalKiosco.Helpers;
 using APIPortalKiosco.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -26,7 +25,7 @@ using System.Xml.Linq;
 
 namespace APIPortalKiosco.Controllers
 {
-    public class FastSalesController : ControllerBase
+    public class FastSalesController : Controller
     {
         #region CONSTRUCTOR
         /// <summary>
@@ -85,7 +84,7 @@ namespace APIPortalKiosco.Controllers
                 }
             ).OrderBy(o => o.FecDt).ToList();
 
-            //ViewBag.Mes = helper.DiaMes(pr_fecprg.Substring(4, 2), "M");
+            ViewBag.Mes = helper.DiaMes(pr_fecprg.Substring(4, 2), "M");
 
             var fechasList = ob_fechas.Select(f => new SelectListItem
             {
@@ -115,7 +114,7 @@ namespace APIPortalKiosco.Controllers
 
             XmlDocument ob_xmldoc = new XmlDocument();
 
-            DateCompraRapida dateCompraRapida = new DateCompraRapida();
+            DataCompraRapida dateCompraRapida = new DataCompraRapida();
             General ob_fncgrl = new General();
 
             List<hora> ob_horflg = new List<hora>();
@@ -459,9 +458,6 @@ namespace APIPortalKiosco.Controllers
         public ActionResult RoomBol(string pr_keypel, string pr_fecprg, string pr_horprg, string pr_tarprg, string pr_salprg, string pr_nompel, string pr_nomfec, string pr_nomhor, string pr_nomtar, string pr_cenprg, string pr_imgpel)
         {
             #region VARIABLES LOCALES
-            var mapaSala = new MapaSala();
-            var bolVenta = new BolVenta();
-
             int lc_maxcol = 0;
             int lc_maxfil = 0;
             int lc_idxrow = 0;
@@ -771,10 +767,9 @@ namespace APIPortalKiosco.Controllers
         /// 
         [HttpGet]
         [Route("ProcesoLiberarSillas")]
-        public LiberaSilla RoomReverse(string pr_keypel, string pr_fecprg, string pr_horprg, string pr_tarprg, string pr_salprg, string pr_nompel, string pr_nomfec, string pr_nomhor, string pr_nomtar, string pr_cenprg, string pr_secsec, string pr_selubi)
+        public ActionResult RoomReverse(string pr_keypel, string pr_fecprg, string pr_horprg, string pr_tarprg, string pr_salprg, string pr_nompel, string pr_nomfec, string pr_nomhor, string pr_nomtar, string pr_cenprg, string pr_secsec, string pr_selubi)
         {
             #region VARIABLES LOCALES
-            var liberaSilla = new LiberaSilla();
             int lc_idearr = 0;
             string lc_result = string.Empty;
             string lc_srvpar = string.Empty;
@@ -825,18 +820,18 @@ namespace APIPortalKiosco.Controllers
                     }
 
                     #region SCOSIL
-                    
-                    liberaSilla.Fila = ls_lstsel[3];
-                    liberaSilla.Sala = Convert.ToInt32(pr_salprg.Substring(0, pr_salprg.IndexOf(";")));
-                    liberaSilla.teatro = Convert.ToInt32(Session.GetString("Teatro"));
-                    liberaSilla.Funcion = Convert.ToInt32(pr_horprg.Length == 4 ? pr_horprg.Substring(0, 2) : pr_horprg.Substring(0, 1));
-                    liberaSilla.Columna = Convert.ToInt32(ls_lstsel[4]);
-                    liberaSilla.Usuario = 777;
-                    liberaSilla.tercero = config.Value.ValorTercero;
-                    liberaSilla.FechaFuncion = pr_fecprg;
+                    LiberaSilla ob_libsrv = new LiberaSilla();
+                    ob_libsrv.Fila = ls_lstsel[3];
+                    ob_libsrv.Sala = Convert.ToInt32(pr_salprg.Substring(0, pr_salprg.IndexOf(";")));
+                    ob_libsrv.teatro = Convert.ToInt32(Session.GetString("Teatro"));
+                    ob_libsrv.Funcion = Convert.ToInt32(pr_horprg.Length == 4 ? pr_horprg.Substring(0, 2) : pr_horprg.Substring(0, 1));
+                    ob_libsrv.Columna = Convert.ToInt32(ls_lstsel[4]);
+                    ob_libsrv.Usuario = 777;
+                    ob_libsrv.tercero = config.Value.ValorTercero;
+                    ob_libsrv.FechaFuncion = pr_fecprg;
 
                     //Generar y encriptar JSON para servicio
-                    lc_srvpar = ob_fncgrl.JsonConverter(liberaSilla);
+                    lc_srvpar = ob_fncgrl.JsonConverter(ob_libsrv);
 
                     lc_srvpar = lc_srvpar.Replace("fechaFuncion", "FechaFuncion");
                     lc_srvpar = lc_srvpar.Replace("sala", "Sala");
@@ -850,6 +845,19 @@ namespace APIPortalKiosco.Controllers
 
                     //Consumir servicio LIB
                     lc_result = ob_fncgrl.WebServices(string.Concat(config.Value.ScoreServices, "scosil/"), lc_srvpar);
+
+                    //Generar Log
+                    LogSales logSales = new LogSales();
+                    LogAudit logAudit = new LogAudit(config);
+                    logSales.Id = Guid.NewGuid().ToString();
+                    logSales.Fecha = DateTime.Now;
+                    logSales.Programa = "FastSales/RoomReverse";
+                    logSales.Metodo = "SCOSIL";
+                    logSales.ExceptionMessage = lc_srvpar;
+                    logSales.InnerExceptionMessage = lc_result;
+
+                    //Escribir Log
+                    logAudit.LogApp(logSales);
 
                     //Validar secuencia
                     if (lc_result.Substring(0, 1) == "0")
@@ -865,7 +873,7 @@ namespace APIPortalKiosco.Controllers
                         //Validar respuesta llave 1
                         if (ob_diclst.ContainsKey("Validación"))
                         {
-                            //return RedirectToAction("Error", "Pages", new { pr_message = ob_diclst["Validación"].ToString(), pr_flag = "PR" });
+                            return RedirectToAction("Error", "Pages", new { pr_message = ob_diclst["Validación"].ToString(), pr_flag = "PR" });
                         }
                         else
                         {
@@ -876,23 +884,38 @@ namespace APIPortalKiosco.Controllers
                                     continue;
                                 else
                                 {
-                                    //return RedirectToAction("Error", "Pages", new { pr_message = ob_diclst["Respuesta"].ToString(), pr_flag = "ER" });
+                                    return RedirectToAction("Error", "Pages", new { pr_message = ob_diclst["Respuesta"].ToString(), pr_flag = "ER" });
                                 }
                             }
                         }
                     }
-           
+                    else
+                    {
+                        return RedirectToAction("Error", "Pages", new { pr_message = "Error al liberar silla SCOLIB", pr_flag = "ER" });
+                    }
                     #endregion
                 }
 
                 //Validar acción
-                return liberaSilla;
+                return RedirectToAction("RoomBol", "FastSales", new { pr_keypel = pr_keypel, pr_fecprg = pr_fecprg, pr_horprg = pr_horprg, pr_tarprg = pr_tarprg, pr_salprg = pr_salprg, pr_nompel = pr_nompel, pr_nomfec = pr_nomfec, pr_nomhor = pr_nomhor, pr_nomtar = pr_nomtar, pr_cenprg = pr_cenprg });
             }
             catch (Exception lc_syserr)
             {
+                //Generar Log
+                LogSales logSales = new LogSales();
+                LogAudit logAudit = new LogAudit(config);
+                logSales.Id = Guid.NewGuid().ToString();
+                logSales.Fecha = DateTime.Now;
+                logSales.Programa = "FastSales/RoomReverse";
+                logSales.Metodo = "GET";
+                logSales.ExceptionMessage = lc_syserr.Message;
+                logSales.InnerExceptionMessage = logSales.ExceptionMessage.Contains("Inner") ? lc_syserr.InnerException.Message : "null";
+
+                //Escribir Log
+                logAudit.LogApp(logSales);
 
                 //Devolver vista de error
-                return liberaSilla;
+                return RedirectToAction("Error", "Pages", new { pr_message = config.Value.MessageException + logSales.Id, pr_flag = "ER" });
             }
         }
 
@@ -929,20 +952,20 @@ namespace APIPortalKiosco.Controllers
                 ViewBag.pr_tiplog = pr_tiplog;
                 ViewBag.pr_tbview = pr_tbview;
 
-                ////Session carrito de compras
-                //Session.Remove("pr_tbviewFS");
-                //Session.SetString("pr_tbviewFS", pr_tbview);
-                //Session.Remove("pr_secproFS");
-                //Session.SetString("pr_secproFS", pr_secpro);
-                //Session.Remove("pr_swtvenFS");
-                //Session.SetString("pr_swtvenFS", pr_swtven);
-                //Session.Remove("pr_tiplogFS");
-                //Session.SetString("pr_tiplogFS", pr_tiplog);
-                //Session.Remove("pr_cenprgFS");
-                //Session.SetString("pr_cenprgFS", pr_cenprg);
+                //Session carrito de compras
+                Session.Remove("pr_tbviewFS");
+                Session.SetString("pr_tbviewFS", pr_tbview);
+                Session.Remove("pr_secproFS");
+                Session.SetString("pr_secproFS", pr_secpro);
+                Session.Remove("pr_swtvenFS");
+                Session.SetString("pr_swtvenFS", pr_swtven);
+                Session.Remove("pr_tiplogFS");
+                Session.SetString("pr_tiplogFS", pr_tiplog);
+                Session.Remove("pr_cenprgFS");
+                Session.SetString("pr_cenprgFS", pr_cenprg);
 
-                //URLPortal(config);
-                //ListCarrito();
+                URLPortal(config);
+                ListCarrito();
 
                 //Validar seleccion de teatro
                 if (Session.GetString("Teatro") == null)

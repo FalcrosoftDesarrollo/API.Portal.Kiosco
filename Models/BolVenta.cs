@@ -62,7 +62,16 @@ namespace APIPortalKiosco.Models
     /// <summary>
     /// Entidad para datos de cargar sala de cine
     /// </summary>
-    
+    public class MapaSala
+    {
+        public int Sala { get; set; }
+        public int Teatro { get; set; }
+        public int Funcion { get; set; }
+
+        public string Correo { get; set; }
+        public string Tercero { get; set; }
+        public string FechaFuncion { get; set; }
+    }
 
     /// <summary>
     /// Entidad para datos de carga estado de silla de sala de cine

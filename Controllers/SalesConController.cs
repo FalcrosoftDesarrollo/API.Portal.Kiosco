@@ -18,7 +18,7 @@ using System.Data;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace APIPortalWebMed.Controllers
+namespace APIPortalKiosco.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -56,7 +56,7 @@ namespace APIPortalWebMed.Controllers
         /// 
         [HttpGet]
         [Route("ListarProductosVentasPortalWeb")]
-        public ActionResult ProductList(string pr_secpro, string pr_swtven, string pr_tiplog, string pr_tbview = "", string Teatro = "0", string Ciudad = "0")
+        public Producto ProductList(string pr_secpro, string pr_swtven, string pr_tiplog, string pr_tbview = "", string Teatro = "0", string Ciudad = "0")
         {
             #region VARIABLES LOCALES
             string lc_result = string.Empty;
@@ -67,6 +67,8 @@ namespace APIPortalWebMed.Controllers
             List<Producto> ob_result = new List<Producto>();
             Dictionary<string, object> ob_diclst = new Dictionary<string, object>();
 
+            //LisBillboard listaBillboard = new LisBillboard();
+            Producto producto = new Producto();
             Secuencia ob_scopre = new Secuencia();
             General ob_fncgrl = new General();
             #endregion
@@ -84,44 +86,44 @@ namespace APIPortalWebMed.Controllers
                     pr_tbview = "";
 
                 //Inicializar valores de entrada
-                ViewBag.pr_secpro = pr_secpro;
-                ViewBag.pr_swtven = pr_swtven;
-                ViewBag.pr_tiplog = pr_tiplog;
-                ViewBag.pr_tbview = pr_tbview;
+                //ViewBag.pr_secpro = pr_secpro;
+                //ViewBag.pr_swtven = pr_swtven;
+                //ViewBag.pr_tiplog = pr_tiplog;
+                //ViewBag.pr_tbview = pr_tbview;
 
-                //Session carrito de compras
-                Session.Remove("pr_tbview");
-                Session.SetString("pr_tbview", pr_tbview);
-                Session.Remove("pr_secpro");
-                Session.SetString("pr_secpro", pr_secpro);
-                Session.Remove("pr_swtven");
-                Session.SetString("pr_swtven", pr_swtven);
-                Session.Remove("pr_tiplog");
-                Session.SetString("pr_tiplog", pr_tiplog);
+                ////Session carrito de compras
+                //Session.Remove("pr_tbview");
+                //Session.SetString("pr_tbview", pr_tbview);
+                //Session.Remove("pr_secpro");
+                //Session.SetString("pr_secpro", pr_secpro);
+                //Session.Remove("pr_swtven");
+                //Session.SetString("pr_swtven", pr_swtven);
+                //Session.Remove("pr_tiplog");
+                //Session.SetString("pr_tiplog", pr_tiplog);
 
-                URLPortal(config);
+                //URLPortal(config);
 
-                //Validar ciudad y teatro desde web externa
-                if (Teatro != "0")
-                    Selteatros(Teatro);
+                ////Validar ciudad y teatro desde web externa
+                //if (Teatro != "0")
+                //    Selteatros(Teatro);
 
-                //Validar seleccion de teatro
-                if (Session.GetString("Teatro") == null)
-                {
-                    //Devolver vista de error
-                    return RedirectToAction("Error", "Pages", new { pr_message = "Debe seleccionar un teatro para continuar", pr_flag = "P" });
-                }
+                ////Validar seleccion de teatro
+                //if (Session.GetString("Teatro") == null)
+                //{
+                //    //Devolver vista de error
+                //    return RedirectToAction("Error", "Pages", new { pr_message = "Debe seleccionar un teatro para continuar", pr_flag = "P" });
+                //}
 
 
-                ListCarrito();
+                //ListCarrito();
 
                 //Inicializar variables
-                ViewBag.ListaM = null;
-                ViewBag.alertS = false;
-                ViewBag.CantidadProductos = config.Value.CantProductos;
-                ViewBag.UrlRetailImg = config.Value.UrlRetailImg;
-                ViewBag.ClientFrecnt = Session.GetString("ClienteFrecuente");
-                ViewBag.Tipo = pr_tiplog;
+                //listaBillboard.ListaM = null;
+                //ViewBag.alertS = false;
+                //ViewBag.CantidadProductos = config.Value.CantProductos;
+                //ViewBag.UrlRetailImg = config.Value.UrlRetailImg;
+                //ViewBag.ClientFrecnt = Session.GetString("ClienteFrecuente");
+                //ViewBag.Tipo = pr_tiplog;
 
                 ViewBag.Teatro = Session.GetString("TeatroNombre");
                 ViewBag.Correo = Session.GetString("Usuario");
@@ -157,11 +159,11 @@ namespace APIPortalWebMed.Controllers
                 //Encriptar Json PRE
                 lc_srvpar = ob_fncgrl.EncryptStringAES(lc_srvpar);
 
-                //Consumir servicio PRE
-                if (ViewBag.ClientFrecnt == "No")
-                    lc_result = ob_fncgrl.WebServices(string.Concat(config.Value.ScoreServices, "scopre/"), lc_srvpar);
-                else
-                    lc_result = ob_fncgrl.WebServices(string.Concat(config.Value.ScoreServices, "scopcf/"), lc_srvpar);
+                ////Consumir servicio PRE
+                //if (ViewBag.ClientFrecnt == "No")
+                //    lc_result = ob_fncgrl.WebServices(string.Concat(config.Value.ScoreServices, "scopre/"), lc_srvpar);
+                //else
+                //    lc_result = ob_fncgrl.WebServices(string.Concat(config.Value.ScoreServices, "scopcf/"), lc_srvpar);
 
                 //Generar Log
                 //LogSales logSales = new LogSales();
@@ -284,25 +286,26 @@ namespace APIPortalWebMed.Controllers
                 #endregion
 
                 //Devolver a vista
-                return View();
+                return producto;
             }
             catch (Exception lc_syserr)
             {
-                //Generar Log
-                LogSales logSales = new LogSales();
-                LogAudit logAudit = new LogAudit(config);
-                logSales.Id = Guid.NewGuid().ToString();
-                logSales.Fecha = DateTime.Now;
-                logSales.Programa = "SalesCon/ProductList";
-                logSales.Metodo = "GET";
-                logSales.ExceptionMessage = lc_syserr.Message;
-                logSales.InnerExceptionMessage = logSales.ExceptionMessage.Contains("Inner") ? lc_syserr.InnerException.Message : "null";
+                ////Generar Log
+                //LogSales logSales = new LogSales();
+                //LogAudit logAudit = new LogAudit(config);
+                //logSales.Id = Guid.NewGuid().ToString();
+                //logSales.Fecha = DateTime.Now;
+                //logSales.Programa = "SalesCon/ProductList";
+                //logSales.Metodo = "GET";
+                //logSales.ExceptionMessage = lc_syserr.Message;
+                //logSales.InnerExceptionMessage = logSales.ExceptionMessage.Contains("Inner") ? lc_syserr.InnerException.Message : "null";
 
-                //Escribir Log
-                logAudit.LogApp(logSales);
+                ////Escribir Log
+                //logAudit.LogApp(logSales);
 
                 //Devolver vista de error
-                return RedirectToAction("Error", "Pages", new { pr_message = config.Value.MessageException + logSales.Id });
+                //return RedirectToAction("Error", "Pages", new { pr_message = config.Value.MessageException + logSales.Id });
+                return producto;
             }
         }
 
@@ -551,7 +554,7 @@ namespace APIPortalWebMed.Controllers
         /// 
         [HttpGet]
         [Route("CargarVistaDetalleProducto")]
-        public ActionResult Details(string pr_keypro, string pr_secpro, string pr_swtven, string pr_tiplog, string pr_swtadd)
+        public Producto Details(string pr_keypro, string pr_secpro, string pr_swtven, string pr_tiplog, string pr_swtadd)
         {
             #region VARIABLES LOCALES
             string lc_result = string.Empty;
@@ -566,58 +569,59 @@ namespace APIPortalWebMed.Controllers
             List<Producto> ob_return = new List<Producto>();
             Dictionary<string, object> ob_diclst = new Dictionary<string, object>();
 
+            LisBillboard listaBillboard = new LisBillboard();
             Secuencia ob_scopre = new Secuencia();
-            Producto ob_datpro = new Producto();
+            Producto producto = new Producto();
             General ob_fncgrl = new General();
             #endregion
 
-            //Inicializar variables
-            ViewBag.ListaM = null;
-            ViewBag.alertS = false;
-            ViewBag.UrlRetailImg = config.Value.UrlRetailImg;
-            ViewBag.CantidadProductos = config.Value.CantProductos;
-            ViewBag.Secuencia = pr_secpro;
-            ViewBag.SwitchVenta = pr_swtven;
-            ViewBag.Tipo = pr_tiplog;
-            ViewBag.SwitchAdd = pr_swtadd;
-            ViewBag.ListaB = null;
-            ViewBag.ListaC = null;
+            ////Inicializar variables
+            //listaBillboard.ListaM = null;
+            ////ViewBag.alertS = false;
+            //producto.UrlRetailImg = config.Value.UrlRetailImg;
+            //producto.CantidadProductos = config.Value.CantProductos;
+            //producto.Secuencia = pr_secpro;
+            //producto.SwitchVenta = pr_swtven;
+            //producto.Tipo = pr_tiplog;
+            //producto.SwitchAdd = pr_swtadd;
+            //ViewBag.ListaB = null;
+            //ViewBag.ListaC = null;
 
             //Session carrito de compras
-            Session.Remove("pr_keypro");
-            Session.SetString("pr_keypro", pr_keypro);
-            Session.Remove("pr_secpro");
-            Session.SetString("pr_secpro", pr_secpro);
-            Session.Remove("pr_swtven");
-            Session.SetString("pr_swtven", pr_swtven);
-            Session.Remove("pr_tiplog");
-            Session.SetString("pr_tiplog", pr_tiplog);
+            //Session.Remove("pr_keypro");
+            //Session.SetString("pr_keypro", pr_keypro);
+            //Session.Remove("pr_secpro");
+            //Session.SetString("pr_secpro", pr_secpro);
+            //Session.Remove("pr_swtven");
+            //Session.SetString("pr_swtven", pr_swtven);
+            //Session.Remove("pr_tiplog");
+            //Session.SetString("pr_tiplog", pr_tiplog);
 
             try
             {
-                URLPortal(config);
-                ListCarrito();
+                //URLPortal(config);
+                //ListCarrito();
 
                 //Validar inicio de sesión
-                if (Session.GetString("Usuario") == null)
-                    return RedirectToAction("Error", "Pages", new { pr_message = "Se debe iniciar Sesión para Continuar", pr_flag = "PX" });
+                //if (Session.GetString("Usuario") == null)
+                //    return RedirectToAction("Error", "Pages", new { pr_message = "Se debe iniciar Sesión para Continuar", pr_flag = "PX" });
 
-                ViewBag.ClientFrecnt = Session.GetString("ClienteFrecuente"); //"No;"
+                //InternetSales.ClienteFrecuente = Session.GetString("ClienteFrecuente"); //"No;"
 
-                ob_datpro.Codigo = Convert.ToDecimal(pr_keypro);
-                ob_datpro.SwtVenta = pr_swtven;
-                ob_datpro.EmailEli = Session.GetString("Usuario");
-                ob_datpro.NombreEli = Session.GetString("Nombre");
-                ob_datpro.KeyTeatro = Session.GetString("Teatro");
-                ob_datpro.DesTeatro = Session.GetString("TeatroNombre");
-                ob_datpro.ApellidoEli = Session.GetString("Apellido");
-                ob_datpro.TelefonoEli = Session.GetString("Telefono");
-                ob_datpro.KeySecuencia = pr_secpro;
+                producto.Codigo = Convert.ToDecimal(pr_keypro);
+                producto.SwtVenta = pr_swtven;
+                producto.EmailEli = Session.GetString("Usuario");
+                producto.NombreEli = Session.GetString("Nombre");
+                producto.KeyTeatro = Session.GetString("Teatro");
+                producto.DesTeatro = Session.GetString("TeatroNombre");
+                producto.ApellidoEli = Session.GetString("Apellido");
+                producto.TelefonoEli = Session.GetString("Telefono");
+                producto.KeySecuencia = pr_secpro;
 
                 #region SERVICIO SCOPRE
                 //Asignar valores PRE
                 ob_scopre.Punto = Convert.ToInt32(config.Value.PuntoVenta);
-                ob_scopre.Teatro = Convert.ToInt32(ob_datpro.KeyTeatro);
+                ob_scopre.Teatro = Convert.ToInt32(producto.KeyTeatro);
                 ob_scopre.Tercero = config.Value.ValorTercero;
 
                 //Generar y encriptar JSON para servicio PRE
@@ -629,21 +633,21 @@ namespace APIPortalWebMed.Controllers
                 //Encriptar Json PRE
                 lc_srvpar = ob_fncgrl.EncryptStringAES(lc_srvpar);
 
-                //Consumir servicio PRE
-                if (ViewBag.ClientFrecnt == "No")
-                    lc_result = ob_fncgrl.WebServices(string.Concat(config.Value.ScoreServices, "scopre/"), lc_srvpar);
-                else
-                    lc_result = ob_fncgrl.WebServices(string.Concat(config.Value.ScoreServices, "scopcf/"), lc_srvpar);
+                ////Consumir servicio PRE
+                //if (ViewBag.ClientFrecnt == "No")
+                //    lc_result = ob_fncgrl.WebServices(string.Concat(config.Value.ScoreServices, "scopre/"), lc_srvpar);
+                //else
+                //    lc_result = ob_fncgrl.WebServices(string.Concat(config.Value.ScoreServices, "scopcf/"), lc_srvpar);
 
-                //Generar Log
-                LogSales logSales = new LogSales();
-                LogAudit logAudit = new LogAudit(config);
-                logSales.Id = Guid.NewGuid().ToString();
-                logSales.Fecha = DateTime.Now;
-                logSales.Programa = "SalesCon/Details";
-                logSales.Metodo = "SCOPRE";
-                logSales.ExceptionMessage = lc_srvpar;
-                logSales.InnerExceptionMessage = lc_result;
+                ////Generar Log
+                //LogSales logSales = new LogSales();
+                //LogAudit logAudit = new LogAudit(config);
+                //logSales.Id = Guid.NewGuid().ToString();
+                //logSales.Fecha = DateTime.Now;
+                //logSales.Programa = "SalesCon/Details";
+                //logSales.Metodo = "SCOPRE";
+                //logSales.ExceptionMessage = lc_srvpar;
+                //logSales.InnerExceptionMessage = lc_result;
 
                 //Escribir Log
                 //logAudit.LogApp(logSales);
@@ -705,7 +709,7 @@ namespace APIPortalWebMed.Controllers
                             }
                         }
 
-                        ViewBag.ListaM = CombosWeb.OrderBy(o => o.OrdenView).ToList();
+                        //producto.ListaM = CombosWeb.OrderBy(o => o.OrdenView).ToList();
                     }
                 }
                 else
@@ -718,26 +722,26 @@ namespace APIPortalWebMed.Controllers
                 //Recorrido por productos para obtener el seleccionado y sus valores
                 foreach (var itepro in ob_return)
                 {
-                    if (itepro.Codigo == ob_datpro.Codigo)
+                    if (itepro.Codigo == producto.Codigo)
                     {
                         switch (itepro.Tipo)
                         {
 
                             case "P": //PRODUCTOS
-                                ob_datpro.Codigo = itepro.Codigo;
-                                ob_datpro.Descripcion = itepro.Descripcion;
-                                ob_datpro.Tipo = itepro.Tipo;
-                                ob_datpro.Precios = itepro.Precios;
+                                producto.Codigo = itepro.Codigo;
+                                producto.Descripcion = itepro.Descripcion;
+                                producto.Tipo = itepro.Tipo;
+                                producto.Precios = itepro.Precios;
                                 break;
 
                             case "C": //COMBOS
-                                ob_datpro.Codigo = itepro.Codigo;
-                                ob_datpro.Descripcion = itepro.Descripcion;
-                                ob_datpro.Tipo = itepro.Tipo;
-                                ob_datpro.Receta = itepro.Receta;
-                                ob_datpro.Precios = itepro.Precios;
+                                producto.Codigo = itepro.Codigo;
+                                producto.Descripcion = itepro.Descripcion;
+                                producto.Tipo = itepro.Tipo;
+                                producto.Receta = itepro.Receta;
+                                producto.Precios = itepro.Precios;
                                 List<Precios> precio_Combo = new List<Precios>();
-                                ob_datpro.Precios = precio_Combo;
+                                producto.Precios = precio_Combo;
 
                                 bool condicionCumplida = false;
 
@@ -785,20 +789,20 @@ namespace APIPortalWebMed.Controllers
                                 break;
 
                             case "A": //CATEGORIAS
-                                ob_datpro.Tipo = itepro.Tipo;
-                                ob_datpro.Check = string.Empty;
-                                ob_datpro.Codigo = itepro.Codigo;
-                                ob_datpro.Descripcion = itepro.Descripcion;
+                                producto.Tipo = itepro.Tipo;
+                                producto.Check = string.Empty;
+                                producto.Codigo = itepro.Codigo;
+                                producto.Descripcion = itepro.Descripcion;
 
                                 List<Receta> ob_recpro = new List<Receta>();
                                 List<Precios> ob_prepro = new List<Precios>();
                                 List<Producto> ob_lispro = new List<Producto>();
                                 List<Pantallas> ob_panpro = new List<Pantallas>();
 
-                                ob_datpro.Receta = ob_recpro;
-                                ob_datpro.Precios = ob_prepro;
-                                ob_datpro.Pantallas = ob_panpro;
-                                ob_datpro.LisProducto = ob_lispro;
+                                producto.Receta = ob_recpro;
+                                producto.Precios = ob_prepro;
+                                producto.Pantallas = ob_panpro;
+                                producto.LisProducto = ob_lispro;
 
                                 foreach (var itecat in itepro.Receta)
                                 {
@@ -810,7 +814,7 @@ namespace APIPortalWebMed.Controllers
                                     ob_itecat.Cantidad = itecat.Cantidad;
                                     ob_itecat.Descripcion = itecat.Descripcion;
 
-                                    ob_datpro.LisProducto.Add(ob_itecat);
+                                    producto.LisProducto.Add(ob_itecat);
                                 }
 
                                 break;
@@ -820,38 +824,39 @@ namespace APIPortalWebMed.Controllers
                         break;
                     }
                 }
-                ViewBag.ListaB = datosFinalesBotella.Distinct().ToList();
-                ViewBag.ListaC = datosFinalesComida.Distinct().ToList();
+                //ViewBag.ListaB = datosFinalesBotella.Distinct().ToList();
+                //ViewBag.ListaC = datosFinalesComida.Distinct().ToList();
                 //Asignar valores encriptados
-                ob_datpro.SwtVenta = pr_swtven;
-                ob_datpro.EmailEli = Session.GetString("Usuario");
-                ob_datpro.NombreEli = Session.GetString("Nombre");
-                ob_datpro.KeyTeatro = Session.GetString("Teatro");
-                ob_datpro.DesTeatro = Session.GetString("TeatroNombre");
-                ob_datpro.TipoCompra = pr_tiplog;
-                ob_datpro.ApellidoEli = Session.GetString("Apellido");
-                ob_datpro.TelefonoEli = Session.GetString("Telefono");
-                ob_datpro.KeySecuencia = pr_secpro;
+                producto.SwtVenta = pr_swtven;
+                producto.EmailEli = Session.GetString("Usuario");
+                producto.NombreEli = Session.GetString("Nombre");
+                producto.KeyTeatro = Session.GetString("Teatro");
+                producto.DesTeatro = Session.GetString("TeatroNombre");
+                producto.TipoCompra = pr_tiplog;
+                producto.ApellidoEli = Session.GetString("Apellido");
+                producto.TelefonoEli = Session.GetString("Telefono");
+                producto.KeySecuencia = pr_secpro;
 
-                return View(ob_datpro);
+                return producto;
             }
             catch (Exception lc_syserr)
             {
-                //Generar Log
-                LogSales logSales = new LogSales();
-                LogAudit logAudit = new LogAudit(config);
-                logSales.Id = Guid.NewGuid().ToString();
-                logSales.Fecha = DateTime.Now;
-                logSales.Programa = "SalesCon/Details";
-                logSales.Metodo = "GET";
-                logSales.ExceptionMessage = lc_syserr.Message;
-                logSales.InnerExceptionMessage = logSales.ExceptionMessage.Contains("Inner") ? lc_syserr.InnerException.Message : "null";
+                ////Generar Log
+                //LogSales logSales = new LogSales();
+                //LogAudit logAudit = new LogAudit(config);
+                //logSales.Id = Guid.NewGuid().ToString();
+                //logSales.Fecha = DateTime.Now;
+                //logSales.Programa = "SalesCon/Details";
+                //logSales.Metodo = "GET";
+                //logSales.ExceptionMessage = lc_syserr.Message;
+                //logSales.InnerExceptionMessage = logSales.ExceptionMessage.Contains("Inner") ? lc_syserr.InnerException.Message : "null";
 
-                //Escribir Log
-                logAudit.LogApp(logSales);
+                ////Escribir Log
+                //logAudit.LogApp(logSales);
 
                 //Devolver vista de error
-                return RedirectToAction("Error", "Pages", new { pr_message = config.Value.MessageException + logSales.Id });
+                //return RedirectToAction("Error", "Pages", new { pr_message = config.Value.MessageException + logSales.Id });
+                return producto;
             }
         }
         #endregion
@@ -863,7 +868,6 @@ namespace APIPortalWebMed.Controllers
         /// <param name="pr_datpro">Entidad producto seleccionado</param>
         /// <returns></returns>
         [HttpPost]
-        [ValidateAntiForgeryToken]
         [Route("GenerarDetalleCarritoCompra")]
         public ActionResult Details(Producto pr_datpro)
         {

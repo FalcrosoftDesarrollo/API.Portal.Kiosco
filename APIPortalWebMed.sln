@@ -5,7 +5,7 @@ VisualStudioVersion = 17.8.34601.278
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APIPortalKiosco", "APIPortalKiosco.csproj", "{BED06CBE-E11F-454A-B3F0-A2B82335BE9F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APIPortalKiosco.Entities", "..\APIPortalKiosco.Entities\APIPortalKiosco.Entities.csproj", "{C20E1FC9-7E32-4853-A003-1F7905A47E05}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APIPortalKiosco.Entities", "..\APIPortalWebMed.Entities\APIPortalKiosco.Entities.csproj", "{96F72CB0-C682-4A35-83C5-EF596D307B53}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{BED06CBE-E11F-454A-B3F0-A2B82335BE9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BED06CBE-E11F-454A-B3F0-A2B82335BE9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BED06CBE-E11F-454A-B3F0-A2B82335BE9F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C20E1FC9-7E32-4853-A003-1F7905A47E05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C20E1FC9-7E32-4853-A003-1F7905A47E05}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C20E1FC9-7E32-4853-A003-1F7905A47E05}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C20E1FC9-7E32-4853-A003-1F7905A47E05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96F72CB0-C682-4A35-83C5-EF596D307B53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96F72CB0-C682-4A35-83C5-EF596D307B53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96F72CB0-C682-4A35-83C5-EF596D307B53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96F72CB0-C682-4A35-83C5-EF596D307B53}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
