@@ -1,17 +1,6 @@
-﻿/******************************************************************************************
-*   Autor      : Daniel Páez Puentes - UNIFIC D&I GROUP                                   *
-*   Módulo     : FastSalesController.cs                                                   *
-*   Entidad    : Portal Web - Score 4.1                                                   *
-*   Fecha      : 15/10/2020                                                               *
-*   Descripción: Clase controlador que contiene los métodos para interactuar con las      *
-*                páginas de la vista                                                      *
-*                                                                                         *
-*   Detalle Cambios: -> Creación - DPP - 15/10/2020                                       *
-*   Detalle Cambio: Refactorizacion código -> (Antoine Román - Falcrosoft) 02/01/2024     *
-******************************************************************************************/
-using APIPortalKiosco.Data;
+﻿using APIPortalKiosco.Data;
 using APIPortalKiosco.Entities;
-using APIPortalKiosco.Models;
+using APIPortalKiosco.Helpers; 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Options;
@@ -55,8 +44,7 @@ namespace APIPortalKiosco.Controllers
 
             if (string.IsNullOrEmpty(pr_fecprg))
                 pr_fecprg = dt_fechoy.ToString("yyyyMMdd");
-
-            // Construir la URL completa con el valor de la sesión del teatro
+             
             string url = config.Value.Variables41T + Session.GetString("Teatro");
 
             XDocument xdoc = XDocument.Load(url);
@@ -103,156 +91,156 @@ namespace APIPortalKiosco.Controllers
         /// </summary>
         /// <returns></returns>
         /// 
-        [HttpGet]
-        [Route("CargarCarteleraXML")]
-        public ActionResult Home(string Teatro = "0", string Ciudad = "0", string Pelicula = "0", string Fecha = "0", string tipo = "")
-        {
-            #region VARIABLES LOCALES
-            bool flag;
-            string fr_auxfec = string.Empty;
-            string lc_swtpel = string.Empty;
+        //[HttpGet]
+        //[Route("CargarCarteleraXML")]
+        //public ActionResult Home(string Teatro = "0", string Ciudad = "0", string Pelicula = "0", string Fecha = "0", string tipo = "")
+        //{
+        //    #region VARIABLES LOCALES
+        //    bool flag;
+        //    string fr_auxfec = string.Empty;
+        //    string lc_swtpel = string.Empty;
 
-            XmlDocument ob_xmldoc = new XmlDocument();
+        //    XmlDocument ob_xmldoc = new XmlDocument();
 
-            DataCompraRapida dateCompraRapida = new DataCompraRapida();
-            General ob_fncgrl = new General();
+        //    DataCompraRapida dateCompraRapida = new DataCompraRapida();
+        //    General ob_fncgrl = new General();
 
-            List<hora> ob_horflg = new List<hora>();
-            #endregion
+        //    List<hora> ob_horflg = new List<hora>();
+        //    #endregion
 
-            try
-            {
-                Session.Remove("FlagCompra");
-                Session.SetString("FlagCompra", "R");
+        //    try
+        //    {
+        //        Session.Remove("FlagCompra");
+        //        Session.SetString("FlagCompra", "R");
 
-                //Validar inicio de sesión
-                if (Teatro != "0" && Session.GetString("Usuario") == null)
-                    return RedirectToAction("Error", "Pages", new { pr_message = "Se debe iniciar Sesión para Continuar", pr_flag = "PR-" + Teatro + ";" + Ciudad });
+        //        //Validar inicio de sesión
+        //        if (Teatro != "0" && Session.GetString("Usuario") == null)
+        //            return RedirectToAction("Error", "Pages", new { pr_message = "Se debe iniciar Sesión para Continuar", pr_flag = "PR-" + Teatro + ";" + Ciudad });
 
-                //Cargar ciudades home y teatro por defecto si aplica
-                if (Session.GetString("Teatro") != null)
-                {
-                    Ciuteatros("SEL");
-                }
-                else
-                {
-                    if (Session.GetString("CiudadTeatro") != null)
-                        Ciuteatros(Session.GetString("CiudadTeatro"));
-                    else
-                        Ciuteatros();
-                }
+        //        //Cargar ciudades home y teatro por defecto si aplica
+        //        if (Session.GetString("Teatro") != null)
+        //        {
+        //            Ciuteatros("SEL");
+        //        }
+        //        else
+        //        {
+        //            if (Session.GetString("CiudadTeatro") != null)
+        //                Ciuteatros(Session.GetString("CiudadTeatro"));
+        //            else
+        //                Ciuteatros();
+        //        }
 
-                //Validar ciudad y teatro desde web externa
-                if (Teatro != "0")
-                    Selteatros(Teatro);
+        //        //Validar ciudad y teatro desde web externa
+        //        if (Teatro != "0")
+        //            Selteatros(Teatro);
 
-                //Validar seleccion
-                if (Pelicula == "Elegir Película")
-                {
-                    dateCompraRapida.Pelicula = "0";
-                    dateCompraRapida.Fecha = "0";
-                    return View(dateCompraRapida);
-                }
+        //        //Validar seleccion
+        //        if (Pelicula == "Elegir Película")
+        //        {
+        //            dateCompraRapida.Pelicula = "0";
+        //            dateCompraRapida.Fecha = "0";
+        //            return View(dateCompraRapida);
+        //        }
 
-                //Validar seleccion
-                if (Fecha == "Elegir Fecha")
-                {
-                    dateCompraRapida.Pelicula = "0";
-                    dateCompraRapida.Fecha = "0";
-                    return View(dateCompraRapida);
-                }
+        //        //Validar seleccion
+        //        if (Fecha == "Elegir Fecha")
+        //        {
+        //            dateCompraRapida.Pelicula = "0";
+        //            dateCompraRapida.Fecha = "0";
+        //            return View(dateCompraRapida);
+        //        }
 
-                //Obtener información de la web
-                ViewBag.Pelicula = null;
-                ViewBag.Fecha = null;
+        //        //Obtener información de la web
+        //        ViewBag.Pelicula = null;
+        //        ViewBag.Fecha = null;
 
-                dateCompraRapida.Fecha = "0";
-                dateCompraRapida.Pelicula = "0";
+        //        dateCompraRapida.Fecha = "0";
+        //        dateCompraRapida.Pelicula = "0";
 
-                //Recorrer xml y obtener datos
-                var fechas = new List<SelectListItem>();
-                var peliculas = new List<SelectListItem>();
-
-
-                peliculas = DataPeliculas(Pelicula, ob_xmldoc, ob_horflg);
-                if (Pelicula != "0")
-                {
-                    dateCompraRapida.Pelicula = Pelicula;
-                    Pelicula = dateCompraRapida.Pelicula;
-                }
+        //        //Recorrer xml y obtener datos
+        //        var fechas = new List<SelectListItem>();
+        //        var peliculas = new List<SelectListItem>();
 
 
+        //        peliculas = DataPeliculas(Pelicula, ob_xmldoc, ob_horflg);
+        //        if (Pelicula != "0")
+        //        {
+        //            dateCompraRapida.Pelicula = Pelicula;
+        //            Pelicula = dateCompraRapida.Pelicula;
+        //        }
 
-                if (Pelicula != "0")
-                {
-                    var datePortal = FechasPortal("", "Normal", Pelicula);
-                    if (datePortal.Count <= 0)
-                    {
-                        datePortal = FechasPortal("", "Estreno", Pelicula);
-                    }
 
-                    if (datePortal.Count <= 0)
-                    {
-                        datePortal = FechasPortal("", "Preventa", Pelicula);
-                    }
 
-                    fechas = datePortal;
-                }
+        //        if (Pelicula != "0")
+        //        {
+        //            var datePortal = FechasPortal("", "Normal", Pelicula);
+        //            if (datePortal.Count <= 0)
+        //            {
+        //                datePortal = FechasPortal("", "Estreno", Pelicula);
+        //            }
 
-                if (Fecha != "0")
-                {
-                    dateCompraRapida.Fecha = Fecha;
-                    return RedirectToAction("DetailsBol", "FastSales", new { pr_keypel = dateCompraRapida.Pelicula, pr_fecprg = dateCompraRapida.Fecha });
-                }
+        //            if (datePortal.Count <= 0)
+        //            {
+        //                datePortal = FechasPortal("", "Preventa", Pelicula);
+        //            }
 
-                //Asignar flag maxima hora de funcion a session
-                Session.Remove("Finhora");
-                if (config.Value.MinDifConf != "0")
-                {
-                    DateTime FechaHoraTermino = DateTime.ParseExact(DateTime.Now.ToString("HH:mm"), "HH:mm", System.Globalization.CultureInfo.InvariantCulture);
-                    hora ob_hora = ob_horflg.ToList().LastOrDefault();
+        //            fechas = datePortal;
+        //        }
 
-                    //Diferencia de tiempo entre hora funcion y hora del dia 
-                    TimeSpan diferencia = ob_hora.fechayhora - FechaHoraTermino;
-                    var diferenciaenminutos = diferencia.TotalMinutes;
+        //        if (Fecha != "0")
+        //        {
+        //            dateCompraRapida.Fecha = Fecha;
+        //            return RedirectToAction("DetailsBol", "FastSales", new { pr_keypel = dateCompraRapida.Pelicula, pr_fecprg = dateCompraRapida.Fecha });
+        //        }
 
-                    if (diferenciaenminutos > Convert.ToDouble(config.Value.MinDifConf))
-                        Session.SetString("Finhora", "S");
-                    else
-                        Session.SetString("Finhora", "N");
-                }
-                else
-                {
-                    Session.SetString("Finhora", "S");
-                }
+        //        //Asignar flag maxima hora de funcion a session
+        //        Session.Remove("Finhora");
+        //        if (config.Value.MinDifConf != "0")
+        //        {
+        //            DateTime FechaHoraTermino = DateTime.ParseExact(DateTime.Now.ToString("HH:mm"), "HH:mm", System.Globalization.CultureInfo.InvariantCulture);
+        //            hora ob_hora = ob_horflg.ToList().LastOrDefault();
 
-                URLPortal(config);
-                ListCarrito();
+        //            //Diferencia de tiempo entre hora funcion y hora del dia 
+        //            TimeSpan diferencia = ob_hora.fechayhora - FechaHoraTermino;
+        //            var diferenciaenminutos = diferencia.TotalMinutes;
 
-                //Devolver a vista
-                ViewBag.Pelicula = peliculas;
-                ViewBag.Fecha = fechas;
-                return View(dateCompraRapida);
-            }
-            catch (Exception lc_syserr)
-            {
-                //Generar Log
-                LogSales logSales = new LogSales();
-                LogAudit logAudit = new LogAudit(config);
-                logSales.Id = Guid.NewGuid().ToString();
-                logSales.Fecha = DateTime.Now;
-                logSales.Programa = "FastSales/Home";
-                logSales.Metodo = "GETXML";
-                logSales.ExceptionMessage = lc_syserr.Message;
-                logSales.InnerExceptionMessage = logSales.ExceptionMessage.Contains("Inner") ? lc_syserr.InnerException.Message : "null";
+        //            if (diferenciaenminutos > Convert.ToDouble(config.Value.MinDifConf))
+        //                Session.SetString("Finhora", "S");
+        //            else
+        //                Session.SetString("Finhora", "N");
+        //        }
+        //        else
+        //        {
+        //            Session.SetString("Finhora", "S");
+        //        }
 
-                //Escribir Log
-                logAudit.LogApp(logSales);
+        //        URLPortal(config);
+        //        ListCarrito();
 
-                //Devolver vista de error
-                return RedirectToAction("Error", "Pages", new { pr_message = config.Value.MessageException + logSales.Id, pr_flag = "ER" });
-            }
-        }
+        //        //Devolver a vista
+        //        ViewBag.Pelicula = peliculas;
+        //        ViewBag.Fecha = fechas;
+        //        return View(dateCompraRapida);
+        //    }
+        //    catch (Exception lc_syserr)
+        //    {
+        //        //Generar Log
+        //        LogSales logSales = new LogSales();
+        //        LogAudit logAudit = new LogAudit(config);
+        //        logSales.Id = Guid.NewGuid().ToString();
+        //        logSales.Fecha = DateTime.Now;
+        //        logSales.Programa = "FastSales/Home";
+        //        logSales.Metodo = "GETXML";
+        //        logSales.ExceptionMessage = lc_syserr.Message;
+        //        logSales.InnerExceptionMessage = logSales.ExceptionMessage.Contains("Inner") ? lc_syserr.InnerException.Message : "null";
+
+        //        //Escribir Log
+        //        logAudit.LogApp(logSales);
+
+        //        //Devolver vista de error
+        //        return RedirectToAction("Error", "Pages", new { pr_message = config.Value.MessageException + logSales.Id, pr_flag = "ER" });
+        //    }
+        //}
 
         /// <summary>
         /// GET: Detail -- Cargar vista con el detalle de la película ciudad-teatro-fecha-hora-tarifa
@@ -527,7 +515,7 @@ namespace APIPortalKiosco.Controllers
 
                 //Asignar valores url
                 ob_datprg.HorProg = pr_horprg;
-                ob_datprg.FecProg = pr_fecprg;
+                ob_datprg.FechaPrg = pr_fecprg;
                 ob_datprg.SwtVenta = "V";
                 ob_datprg.KeyTarifa = pr_tarprg;
                 ob_datprg.NombrePel = pr_nompel;
@@ -634,6 +622,7 @@ namespace APIPortalKiosco.Controllers
                 lc_result = ob_fncgrl.WebServices(string.Concat(config.Value.ScoreServices, "scoest/"), lc_srvpar);
 
                 //Generar Log
+                var logSales = new LogSales();
                 logSales.Id = Guid.NewGuid().ToString();
                 logSales.Fecha = DateTime.Now;
                 logSales.Programa = "FastSales/RoomBol";

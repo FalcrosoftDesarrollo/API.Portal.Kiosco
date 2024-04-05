@@ -11,7 +11,7 @@
 ******************************************************************************************/
 using APIPortalKiosco.Data;
 using APIPortalKiosco.Helpers;
-using APIPortalKiosco.Models;
+using APIPortalKiosco.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;

@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APIPortalKiosco", "APIPorta
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APIPortalKiosco.Entities", "..\APIPortalWebMed.Entities\APIPortalKiosco.Entities.csproj", "{96F72CB0-C682-4A35-83C5-EF596D307B53}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APIPortalKiosco.Data", "..\APIPortalKiosco.Data\APIPortalKiosco.Data.csproj", "{4E18C09C-FCED-40B9-A353-78889A858AF3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{96F72CB0-C682-4A35-83C5-EF596D307B53}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96F72CB0-C682-4A35-83C5-EF596D307B53}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{96F72CB0-C682-4A35-83C5-EF596D307B53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E18C09C-FCED-40B9-A353-78889A858AF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E18C09C-FCED-40B9-A353-78889A858AF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E18C09C-FCED-40B9-A353-78889A858AF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E18C09C-FCED-40B9-A353-78889A858AF3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

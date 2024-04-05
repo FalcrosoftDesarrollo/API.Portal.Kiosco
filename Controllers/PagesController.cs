@@ -10,7 +10,7 @@
 *   Detalle Cambio: Refactorizacion código -> (Antoine Román - Falcrosoft) 02/01/2024     *
 ******************************************************************************************/
 using APIPortalKiosco.Data;
-using APIPortalKiosco.Models;
+using APIPortalKiosco.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
