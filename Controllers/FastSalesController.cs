@@ -14,7 +14,9 @@ using System.Xml.Linq;
 
 namespace APIPortalKiosco.Controllers
 {
-    public class FastSalesController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class FastSalesController : ControllerBase
     {
         #region CONSTRUCTOR
         /// <summary>
@@ -443,7 +445,7 @@ namespace APIPortalKiosco.Controllers
         /// 
         [HttpGet]
         [Route("ProcesoSCOGRU")]
-        public ActionResult RoomBol(string pr_keypel, string pr_fecprg, string pr_horprg, string pr_tarprg, string pr_salprg, string pr_nompel, string pr_nomfec, string pr_nomhor, string pr_nomtar, string pr_cenprg, string pr_imgpel)
+        public BolVenta RoomBol(string pr_keypel, string pr_fecprg, string pr_horprg, string pr_tarprg, string pr_salprg, string pr_nompel, string pr_nomfec, string pr_nomhor, string pr_nomtar, string pr_cenprg, string pr_imgpel)
         {
             #region VARIABLES LOCALES
             int lc_maxcol = 0;
@@ -622,7 +624,7 @@ namespace APIPortalKiosco.Controllers
                 lc_result = ob_fncgrl.WebServices(string.Concat(config.Value.ScoreServices, "scoest/"), lc_srvpar);
 
                 //Generar Log
-                var logSales = new LogSales();
+
                 logSales.Id = Guid.NewGuid().ToString();
                 logSales.Fecha = DateTime.Now;
                 logSales.Programa = "FastSales/RoomBol";
@@ -648,7 +650,7 @@ namespace APIPortalKiosco.Controllers
                     ModelState.AddModelError("", lc_result);
 
                     //Devolver a vista
-                    return View(ob_datprg);
+                    return ob_datprg;
                 }
                 #endregion
 
@@ -715,7 +717,7 @@ namespace APIPortalKiosco.Controllers
                 #endregion
 
                 //Devolver a vista
-                return View(ob_datprg);
+                return ob_datprg;
             }
             catch (Exception lc_syserr)
             {
@@ -733,7 +735,7 @@ namespace APIPortalKiosco.Controllers
                 logAudit.LogApp(logSales);
 
                 //Devolver vista de error
-                return RedirectToAction("Error", "Pages", new { pr_message = config.Value.MessageException + logSales.Id, pr_flag = "ER" });
+                //return RedirectToAction("Error", "Pages", new { pr_message = config.Value.MessageException + logSales.Id, pr_flag = "ER" });
             }
         }
 
